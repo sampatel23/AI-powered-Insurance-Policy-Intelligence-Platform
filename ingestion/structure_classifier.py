@@ -63,7 +63,40 @@ class StructureClassifier:
             # -------------------------
             # Section
             # -------------------------
-            if re.match(r"^SECTION\s+[A-Z]", text):
+            if re.match(r"^SECTION\s+[A-Z](?:(?:[).](?:\s|$))|\s|$)", text, re.IGNORECASE):
+
+                line.role = "SECTION"
+
+                continue
+
+            if (
+                line.is_bold
+                and re.match(r"^\d+\.\s+[A-Z][A-Z\s&()/,-]+$", text)
+            ):
+
+                line.role = "SECTION"
+
+                continue
+
+            if (
+                line.company_key == "icici"
+                and line.is_bold
+                and re.match(
+                    r"^[b-f]\.\s+(?:Preamble|Definitions|Benefits covered under the policy|Exclusions)$",
+                    text,
+                    re.IGNORECASE,
+                )
+            ):
+
+                line.role = "SECTION"
+
+                continue
+
+            if (
+                line.company_key == "icici"
+                and line.is_bold
+                and text.lower() in {"e.", "f."}
+            ):
 
                 line.role = "SECTION"
 
