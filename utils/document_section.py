@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+from typing import Any
 
 from utils.document_line import DocumentLine
 
@@ -28,3 +29,5 @@ class DocumentSection:
     source_file: str = ""
 
     file_path: str = ""
+
+    metadata: dict[str, Any] = field(default_factory=dict)
